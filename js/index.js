@@ -1,50 +1,58 @@
-// click events
-document.querySelector('#calculate').onclick = calculateAll;
-document.querySelector('.btn-remove').onclick = deleteProduct;
-document.getElementById(`create`).onclick = createProduct;
+// Click Events
+document.querySelector('#calculate').addEventListener('click', calculateValue);
+document.querySelector('.btn-remove').addEventListener('click', removeProduct);
+document.querySelector('#create').addEventListener('click', addProduct);
 
 
-function calculateAll() {
+//Calculate Value
+function calculateValue() {
   let products = document.querySelectorAll('.product');
   let total = 0;
-  for(product of products) {
+  for (let product of products) {
     let price = product.querySelector('.price span').innerHTML;
     let quantity = product.querySelector('.quantity input').value;
     let subTotal = price * quantity;
-    total += subTotal
+    total += subTotal;
     product.querySelector('.subtotal span').innerHTML = subTotal
+
   }
   document.querySelector('#total-value span').innerHTML = total
 }
 
-
-function deleteProduct(event) {
-  const deleteItem =  event.target;
-  if(event.target.classList.value.includes('btn-remove')) {
-    deleteItem.parentNode.parentNode.parentNode.removeChild(deleteItem.parentNode.parentNode)
-    console.log(deleteItem)
-    calculateAll()
+//Remove Items
+function removeProduct(e) {
+  let deleteItem = document.querySelectorAll('.btn-remove')
+  for (item of deleteItem) {
+    item.onclick = function (e) {
+      e.target.parentNode.parentNode.remove();
+      calculateValue();
+    }
   }
 }
 
-function createProduct() {
-  const name = document.querySelector(`.create-product input`).value;
-  const price = document.querySelector(`.create-product [type='number']`).value;
-  const table = document.getElementsByTagName(`tbody`)[0];
-  const row = table.insertRow();
-  const rowContent = `
-      <td class="name">
-        <span>${name}</span>
-      </td>
-      <td class="price">$<span>${price}</span></td>
-      <td class="quantity">
-        <input type="number" value="0" min="0" placeholder="Quantity" />
-      </td>
-      <td class="subtotal">$<span>0</span></td>
-      <td class="action">
-        <button class="btn btn-remove">Remove</button>
-      </td>`;
-  row.innerHTML = rowContent;
-  row.setAttribute("class", "product");
-  calculateAll()
+// Add New Product
+function addProduct() {
+  const productName = document.querySelector('#product-name').value;
+  const productPrice = document.querySelector('#item-price').value;
+  // console.log(productPrice)
+  let row = `
+    <td class="name">
+    <span>${productName}</span>
+    </td>
+    <td class="price">$<span>${productPrice}</span></td>
+    <td class="quantity">
+    <input type="number" value="0" min="0" placeholder="Quantity" />
+    </td>
+    <td class="subtotal">$<span>0</span></td>
+    <td class="action">
+    <button class="btn btn-remove">Remove</button>
+    </td>
+  `
+  let newRow = document.createElement('tr')
+  newRow.classList.add('.product');
+  newRow.innerHTML = row;
+  document.querySelector("tbody").appendChild(newRow);
+  document.querySelector('#product-name').value = '';
+  document.querySelector('#item-price').value = '';
+  removeProduct();
 }
