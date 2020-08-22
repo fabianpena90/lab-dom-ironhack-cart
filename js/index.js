@@ -22,6 +22,7 @@ function calculateValue() {
 //Remove Items
 function removeProduct(e) {
   let deleteItem = document.querySelectorAll('.btn-remove')
+  if(deleteItem )
   for (item of deleteItem) {
     item.onclick = function (e) {
       e.target.parentNode.parentNode.remove();
@@ -34,6 +35,9 @@ function removeProduct(e) {
 function addProduct() {
   const productName = document.querySelector('#product-name').value;
   const productPrice = document.querySelector('#item-price').value;
+  if(productName === '' || productPrice === ''){
+    alert('Please enter a product name & price!')
+  }
   // console.log(productPrice)
   let row = `
     <td class="name">
